@@ -27,23 +27,36 @@ public class CharacterStatusJsoup {
 	        for (String url : characterUrls) {
 	        	Document doc = Jsoup.connect(url).get();
 	        	
+//	        	System.out.print("(");
+	        	
 	        	String characterName = getStatusByName(doc, "コードネーム");
-		        System.out.println("コードネーム: " + characterName);
-
-		        String hp = getStatusPromotion0(doc, "HP");
-		        System.out.println("HP(未昇進 Lv max): " + hp);
-
-		        String ad = getStatusPromotion0(doc, "攻撃");
-		        System.out.println("攻撃力(未昇進 Lv max): " + ad);
-		        
-		        String ar = getStatusPromotion0(doc, "防御");
-		        System.out.println("防御(未昇進 Lv max): " + ar);
-		        
-		        String mr = getStatusPromotion0(doc, "術耐性");
-		        System.out.println("術耐性(未昇進 Lv max): " + mr);
-		        
-		        String tier = getStatusTier(doc, "レアリティ").substring(1);
-		        System.out.println("Tier: " + tier);
+//		        System.out.println("コードネーム: " + characterName);
+//	        	System.out.print("'" + characterName + "', ");
+	        	
+	        	System.out.println("<a id=\"name\">" + characterName + "</a>"); //仮用
+//
+//		        String hp = getStatusPromotion0(doc, "HP");
+////		        System.out.println("HP(未昇進 Lv max): " + hp);
+//		        System.out.print(hp + ", ");
+////
+//		        String ad = getStatusPromotion0(doc, "攻撃");
+////		        System.out.println("攻撃力(未昇進 Lv max): " + ad);
+//		        System.out.print(ad + ", ");
+////		        
+//		        String ar = getStatusPromotion0(doc, "防御");
+////		        System.out.println("防御(未昇進 Lv max): " + ar);
+//		        System.out.print(ar + ", ");
+////		        
+//		        String mr = getStatusPromotion0(doc, "術耐性");
+////		        System.out.println("術耐性(未昇進 Lv max): " + mr);
+//		        System.out.print(mr + ", ");
+////		        
+//		        String tier = getStatusTier(doc, "レアリティ").substring(1);
+////		        System.out.println("Tier: " + tier);
+//		        System.out.print(tier);
+//	        	
+//	        	System.out.println("),");
+	        	
 	        }
 	        
 	    } catch (IOException e) {
@@ -118,16 +131,19 @@ public class CharacterStatusJsoup {
 	
 	private static String getUrls(Document doc) {
 		
-		for (int i = 1; i <= 11; i++) {
+		for (int i = 1; i < 2; i++) {
 			Elements aTags = doc.select("#sortabletable" + i + " a"); // classがstyle_tableの中のaタグを選択
 
 			for (Element aTag : aTags) {
 	            String url = aTag.attr("href");
-	            if (url.substring(0,1).equals(".")) {
-	            	url = url.replace(".", "");
-	            	url = "https://arknights.wikiru.jp" + url;
-	            	characterUrls.add(url);
+	            if (url.substring(0, 1).equals(".")) {
+	                url = url.replace(".", "");
+	                url = "https://arknights.wikiru.jp" + url;
+	                if (!characterUrls.contains(url)) { // すでにリストに存在しない場合にのみ追加
+	                    characterUrls.add(url);
+	                }
 	            }
+
 	        }
 		}
 		return "Not found";
